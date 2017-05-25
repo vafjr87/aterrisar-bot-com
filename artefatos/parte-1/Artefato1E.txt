@@ -1,0 +1,1978 @@
+# Create Database
+CREATE DATABASE PassagensAereas;
+USE PassagensAereas;
+
+# Create tables
+CREATE TABLE IF NOT EXISTS Assento
+(
+    numero INT NOT NULL,
+    classe INT NOT NULL,
+    n_aeronave INT NOT NULL,
+    c_reserva INT NOT NULL,
+    PRIMARY KEY(numero)
+);
+
+CREATE TABLE IF NOT EXISTS Aeronave
+(
+    numero_serie INT NOT NULL,
+    modelo SMALLINT NOT NULL,
+    qtd_assentos INT NOT NULL,
+    c_companhia INT NOT NULL,
+    PRIMARY KEY(numero_serie)
+);
+
+CREATE TABLE IF NOT EXISTS Companhia
+(
+    codigo INT NOT NULL,
+    registro VARCHAR(30) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    PRIMARY KEY(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS Voo
+(
+    codigo INT NOT NULL,
+    origem VARCHAR(3) NOT NULL,
+    destino VARCHAR(3) NOT NULL,
+    data_hora DATETIME NOT NULL,
+    n_aeronave INT NOT NULL,
+    v_codigo INT NOT NULL,
+    PRIMARY KEY(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS Aeroporto
+(
+    sigla VARCHAR(3) NOT NULL,
+    local VARCHAR(30) NOT NULL,
+    nome VARCHAR(30) NOT NULL,
+    PRIMARY KEY(sigla)
+);
+
+CREATE TABLE IF NOT EXISTS Reserva
+(
+    codigo INT NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    c_passageiro INT NOT NULL,
+    v_codigo INT NOT NULL,
+    PRIMARY KEY(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS Passageiro
+(
+    codigo INT NOT NULL,
+    documento INT NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    endereco VARCHAR(50) NOT NULL,
+    PRIMARY KEY(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS Viagem
+(
+    codigo INT NOT NULL,
+    origem VARCHAR(30),
+    destinho VARCHAR(30),
+    PRIMARY KEY(codigo)
+);
+
+CREATE TABLE IF NOT EXISTS Carrinho
+(
+    codigo INT NOT NULL,
+    p_codigo INT NOT NULL,
+    data DATETIME NOT NULL,
+    v_codigo INT NOT NULL,
+    PRIMARY KEY(codigo, p_codigo)
+);
+
+
+# Create FKs
+ALTER TABLE Assento
+    ADD    FOREIGN KEY (n_aeronave)
+    REFERENCES Aeronave(numero_serie)
+;
+    
+ALTER TABLE Aeronave
+    ADD    FOREIGN KEY (c_companhia)
+    REFERENCES Companhia(codigo)
+;
+    
+ALTER TABLE Voo
+    ADD    FOREIGN KEY (n_aeronave)
+    REFERENCES Aeronave(numero_serie)
+;
+    
+ALTER TABLE Assento
+    ADD    FOREIGN KEY (c_reserva)
+    REFERENCES Reserva(codigo)
+;
+    
+ALTER TABLE Reserva
+    ADD    FOREIGN KEY (c_passageiro)
+    REFERENCES Passageiro(codigo)
+;
+    
+ALTER TABLE Voo
+    ADD    FOREIGN KEY (origem)
+    REFERENCES Aeroporto(sigla)
+;
+    
+ALTER TABLE Voo
+    ADD    FOREIGN KEY (destino)
+    REFERENCES Aeroporto(sigla)
+;
+    
+ALTER TABLE Carrinho
+    ADD    FOREIGN KEY (v_codigo)
+    REFERENCES Viagem(codigo)
+;
+    
+ALTER TABLE Reserva
+    ADD    FOREIGN KEY (v_codigo)
+    REFERENCES Viagem(codigo)
+;
+    
+ALTER TABLE Carrinho
+    ADD    FOREIGN KEY (p_codigo)
+    REFERENCES Passageiro(codigo)
+;
+    
+ALTER TABLE Voo
+    ADD    FOREIGN KEY (v_codigo)
+    REFERENCES Viagem(codigo)
+;
+    
+
+# Create Indexes
+
+
+/* Generating data for table aeroporto... */
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GR','o_ELLDSx&;{h,#_G~','ImU[e');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GS','NdJPXdjgHlO_9t','E_~1eXyxllN\\+p?pzpG6+ \\');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GT','6]up3owf\r\n3E&','H4P^*l3@,DN2=pzQP{?jk');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GU','/1,\\jYLpRj_4,Kx*',')Uv0n%MW');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GV','-Mns','HrNuA}*8-');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GW','XDKm:','MWF8g/DN\'\"');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GX','93','!Kol+<\"\\<tH+u ');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GY','!\'jlff^Sx|','t%[38*Zo&');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('GZ','Q|e\'E4t7l%f','.{tYUxRCj4');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HA',',LvWtiZ@>\r\n&.XlV,# a/R?\'I|J','n;}Ea-m[');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HB','\\D_Z,(Pk=m@','2;:lE!G8x');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HC','5Xc&I_4Gjs`>BU','oQwN984;\'}YVmcN~');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HD',':Y=$,1*VZY1q{bscH','-]AHl}V\":,-O~;(^z');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HE',':GK_ Q{)\'','|rkgAfY1}bY&>CG|\'qVRJVR7');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HF','8\\):/wus$=T<hySy);6&','Ymk%l%l!VB\r\n!kC(|\r\n;~c|');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HG','5','7=W5VSMK:');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HH','wJ$& 3','');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HI','VoPrt>','W$ts=IEC&b4%O');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HJ','LK','Z*qG5&I\r\n9ZQWd~]X-7');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HK','MAE*.pB*.}c','jAnt{\\y@bsN8)6TZG^');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HL','$\\J&3','I\'g(p\r\n_^{}\"ULP3#yetP');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HM','SfI;Y[z:YBQe|dD|$}PS[',',)wLUsd3Br>r:');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HN','0$R','S5<idKZ0IEqWK@V');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HO',']NOv~mj+3<rL+PXkoFIL2*vw]2Mrl?','UY[v(3vBLBl>(CA;|mK(SFSr.');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HP','*','PZ&mJ$+W@2K9G');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HQ','W*!J,pu2u3TK<]Nv> {PON=b8\'','x+*&]<yXQ]I');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HR','+0Ns^\\u%BNn}geqs','4jbL9(.W\'ePGo?t\'f');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HS','cDPk[Mbaa2&','{,+eb&{syEOejYth$\r\ny,\'6W!L');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HT','MfQF&','J6(nX*x]6eUIh./~8');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HU',')gvu','kO<q?4');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HV','Kx=+0`E*^*P\'i[*q',';f2P~n1O');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HW','1T8+tF,\r\n\\FCb}f>Qiv!;q#~z','7DBC)0>UR[\"xL9qP(]\"jlYWK');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HX','g:i9:zex1wjh%7f:3&l1S-','u\\._[*{dR\'`A[XP8PZ');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HY','D>LV%(I-H-qh','<1@*');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('HZ','9N7\'Y;@oM/LQ{r','<6GCufi}cg+&MA$v},a%yZ_p?[g>S$');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IA','1\'P*]!%Pz#zc?~rVC@PN2m1)o!bYq2','P|\r\n$J:4UP;f:vu &2\r\n?#PYy@(?');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IB','rP;`gr\r\nPwaiVw[-LLF3','kqV');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IC',']X/9fT%BF]muT|wz9UY_tX!)zA','iaSZJ i!Cg-');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('ID','euDq:{LtV{<','W}QkX#EQg;ts&)^9Kx');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IE','Rge_)m%;>\'4\'>3W-$M[AWCt`XMupk',' aR.J[\r\nR+');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IF','bF%n!}?pDG$LqKa5O1d yoW|K$08','AUbu?P');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IG','&(4x4+&{E\\[}GR6wGzS|0E6ya?}8','f m<&|UL_0-9qp[Y60YIWa\r\nDC&M');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IH','','Yf|p^CeF|5QsT+alBVQ@?uOZ1j6Z');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('II','1fW-0]e{','d');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IJ','QuVIk>U4994U','o]V\r\nOx');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IK','','i5|Z4=K(-Uzs/f<=2-lh~yQtx');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IL','kZ}1sgcjv/!\\f','z]:6OxO6g;%H88');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IM','SiX{Je^Ok 9-E\r\n','v`gI&k\"x4FLEMEv(C\\');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IN','m0v&fIA2-@DrQzNwKD\\g=l>EKB1~','gn|y{<(b=Y:I\r\n\\S%Lvj=');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IO','o>Pc7%#{lqVjxQr0z\\Zy','phU*81h+cd');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IP','F7iU(R<@_\'`> 2W)\';D5*','<>8Q4cT&Gc=h/)RB|TcW1q?\\,Gx');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IQ','j90$mNz$jsk:9','PrX5r^>L8K');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IR','N@N`.Y4@:KF^,MvoH\\f3W','?l~.\r\n9t+*!|bHFk5SMYZTf8^?');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IS','4)r4o1b?R.Q9LW5Gb7,[','t$F');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IT','~[UfduwaH(Eq<8W1>pAl>e','d\'<cFS41=\\82');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IU','@FO|wtox','iGk');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IV',',>P','ocJ^\'725b*<Z>^_zdjIhz>g#');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IW','mImEjxt~ow;_h#]$KB.<:q-SW,s','Gbz(m`.8');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IX','m(Pvn','$\'EU29aPb8gh8JU%%RGP/0qQ\"8K<u');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IY','.c1\"kmfY;j,\'Pi\\8','E]?.\"Qepg},aAl`');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('IZ','9@NX\r\n Fxsc','lzLX4F7@');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JA','qN\"Y<iB','k1erjQyMkgOSIf.a;BYo');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JB','zyK','');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JC','QPy:dYOfx\r\n`_luV[NJbpsh1,vi&','cQGI$TvN');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JD','>HBn^QMc\r\n','8e~`=fu>YJG)hIQER`W');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JE','A!nd9?Cs)P8v\'-N-Ar}jD/(%mc','\\F*');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JF','/;nQxIW?1$N33\\zcN','V#I?3p`dOPQ\"WeV');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JG','!G3ot8V','fk@JjA7zQh@xl+6NdQ$a4.');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JH','t(CuAbi!Gep=iJ=I','fV\r\n(5z9zLjO[7vZj');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JI','C>H7B[_bf','P6tJi]<o7/g@M5oOq_');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JJ','I}-&JHr6{K5hQ 9Q!D.k\"?d',',>.x\\G<RjmWk\r\n');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JK','++am,rj@&vs}C`DI','30-?c:A$VQ6OqHw;#_>3\\g');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JL','hIvlJ-D] 7JWzIq8',')dFQMvNweF0sf');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JM',',&\\@@P9:G','-5C0Fg&-&<HzYKyAY');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JN','Y}9hu*9B+','}Z]q@|&*');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JO','j','xSw%u^n+3`+M\"~:E1|Yzc<q');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JP','Q','<6zhYZ:57');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JQ','B*<*ifZ+M0n\'','uo`X%P]D?op.Cf dM@Dj\"I@');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JR','Z4ij#ilBfo+;\"eu?S','xVzf@m5.}CO\'Imy2;7j');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JS','6EF/VvGTV{w|:M9r{|~t.\'','J.V7m9wk<3zCiX>8');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JT','*O|f0a!k{u_jy#?>in','RqW|Ej');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JU','V{vyb/A\r\n4JL5j7EdB0;\'','PG0<v#:j.$(opH9');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JV','783c.pYB>}l1OZ!@UE~Y!kM{#lu![','t}S{SRyhvE!a83');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JW','X\r\nu,:_Yt\'LtH|\"Us5Q\\','.,j6&f0Q+ds\\M@h4mVt\"');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JX','Vk}Gh\r\nZf\'znsfc','IQe&&');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JY','+$A4A wdoQk5,U\'D6k{a','7tc~*-G{bE_umC/D\"lRgKu6v}1]');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('JZ','.xaQ1ftuj{#A};LG\\??dr','0!z36.?!)');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KA','OTt_m>x|rBvY]uPad8<[4]AH','>i7,R;8');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KB',';M=CY$\r\n% a3ZE-\'','?X UaJ;E(#');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KC','BJ:?Z^Xo','7');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KD',',DX4','*pt y');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KE','Zp!/Oe4]~X}YQ,o$I:QSxv!','|ZD');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KF','ZsiWxi>EI8','E(c\r\nsqi$_FH}@!BOy!|b\"[{n');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KG','4-]9(w[(V?K6O;wR f+%','}Td-i>5ZUr`>&d81*5q3HBh)blOwD');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KH','f,_3Kb','V8\\wG/6=iF>mT%K)kTb{s7w4z');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KI','soiNc+dQ-2jL\'>T?=iNHekn]{&=','qZkA;jMpq*R!T j);?6WL=1omJrjX');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KJ','\"\'','~\'^A&EEE\'pO%z\'d)');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KK','wCRvV$*r!9]BSV:?,hheV=A\r\n*1','/4J@QdS4OA)W-hdw-sigMnRa');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KL',']2R',')-b\"r;');
+INSERT INTO `aeroporto`(`sigla`,`local`,`nome`) 
+VALUES('KM','V','c@Y^');
+COMMIT;
+
+/* Generating data for table companhia... */
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(201,'+F','.?f\\dknV7x,Vig_M0zi)Zyc}or&axx(E+zZ}0h_Af');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(202,'Irr|','{U(<\"\"A PXz?{1+8yIF');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(203,'G%S D`][tUiHojSJNaYA0lx-m','6a6)3bN//BM-7^ZvUqV9U/{1n2');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(204,'`q^ zUf8>oxsfm3o Cvn-VY\r\n',' }t(cGSH[k%:\'Yu~ZbMe(|J');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(205,'4i59J3\\599.6:Pi:6qE,W^f','Q*`@{cVn\"~N}\\@a!@A,euZ#MjS');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(206,'qaA*n#19%]-Z','4d6gGm$hkFXw5P.8A}JQpA#C?iU]j\\3~.O#ox');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(207,'CufOlG;Z\'w2[m#>F5','\"]8\'9');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(208,'0*E8','7&`zEwXI-H~ b\\Ag&7H(RF');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(209,'T_C?U`P>uh_Dkh','Va6<?>y\r\nKM\r\nTKiZ;l$x`LX2/Eqy9');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(210,'^|','-,,v\r\nXylV/!~b&s)%t_%Jd:+Xa%?5zT\\}s');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(211,'T}\\!Rgw&-LS>pZT|','pUP1Eh6)QlRKVDAvrGVmHjrK7FP$_%.FoM9b@;a');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(212,'%KiC_qxz.w@Imr/_XMw?sq','8$nAhco{l6Fga+Ny*7Iu\r\n{>@Ihm+Zrw6X.N7!5_');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(213,'[y/c\\\"Uy<S<e-5vM5X\r\nGDL4','9.m5L\\Ey),CQRNiV+\\OZ9CUo$GHQ7y\\*RNS-,zRUB];)Y.prd');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(214,'N#-;','^FrXe|aJ^n|p\'n<0gUF@%VF9;O@nW988M1?4POwbrKQ');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(215,'cgH;Rm\r\nZT','x906);Dw*axLqie.Jx>L');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(216,'pli&id,eE0*S9]FK~MtnK8Lo+',']*nyQ');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(217,'R%$$\\k]$\r\nk-R*C-p;-!)AD','F^Eq');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(218,'#J4c86-E#y,HM\r\nGwpttXng%q^ca','T]WLZ6LtoG>sp/>c1B_b$J*GQ%=<4egq2514B4-\'$.a');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(219,'3OO #2 >6Rb#gx\r\n!-Fdn\r\n','O$GTl#&DgD;QFBxBS@#B\r\n<yc(GWS`6vfqy>EQN');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(220,'\\#E5vG\"K%','2qJZ\'s`41oz0#;|`');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(221,',z','P]7A3P<)}c]nK;F/$Pe1p>{w5d*eN_s(?ge!-C]\\~PJdC0yPl');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(222,'dH','$-');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(223,' 4)KY45IfZ','am?O6m*mu0$[y,YN;om\\HcgSN*wa#]8]$qFA?)T\r\n/6f` ');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(224,'sgHiOa#o:+WlTqV?Tv?$CrAA<.4x','rX_1B\r\nR.uD-6h`_Rekr-%~R^|');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(225,'ueSU4 N+*','9V+60h\\?p|&\r\n};');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(226,'w;5;','49OCp4~C%8W/%\'`\r\nkCNxR?u$og3@4qYL}*=!)|');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(227,'.|owA=C]-ic`\\rds:;\r\nzRy**yhzts','JA9R1`b DWe\\,o^oHGjcwPj;Oa+[=wG[W-#YMl');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(228,'i3.zD{j`[dP51oV(ov','4>.5v:6W0Oc0%RO5wD\"q%Jj8/5@{ G[Km7B{2E5qDhA{:i');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(229,'#E7\'m\"|?]~/\r\nV[\r\n}9?T','=MfP[NM0+ax?~t>');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(230,'^ 3v','9n:]F');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(231,'A3@yh&+\"4NvW1LJ`.qO,5Nn-','web/}bKFG\"8R/x\r\n9v/bq;Z/4a GGL_e{.6!-y');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(232,'(&E9\\IQ\r\n=@+},0Q+~nxr)k','.o:jof6Lc7S}Q@<.yVs6.yc^n.S:&BF{9;@Q]K~)Y|8');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(233,'vt4\\A&/','oKgG03oAQE/GxM~|SG}?czn1{AtJ.y_b7K');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(234,'!z|\"+tBJiU4)gf','XDkI9G\'N/<E@E\r\n`\"(E');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(235,'y','9V)P\r\nW,aNCJ)fK\\/_f<M3z534)=0,vsh`{,t g\']2P\"Ke>BUb');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(236,'YH_YZHMSO','J1c#T26V*[&\"?&+3\'RC(\"R(3IV-][\'l\\t._');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(237,'6sZ>;%fr9mjOklZB\r\na','d@k~Cc|_\" B{FHL/`a\\1b9u<jH$\"!7');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(238,'','_?wghbnj9\r\nXj;9L[\r\nVV(bO|:l8EZlqa]');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(239,'P=\\MIj* akD>9:HQCq','Z~*U`/.?Q6t\\r(#;m`Hv;O.\r\nZ=;p9\\*');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(240,'e_w7pcs2&;aNbMr','Y\"i[IU$w?clo)%htzB?f$ 86I4,p*1689#;#,Y%Ch*)/eOo');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(241,'glq]Ew7M^_7(~sA','q(x1E ~a3ZIF_w)X-W@t;s~}r[');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(242,'F}>&GwQ#AQmj.*`|m6H%wm32]M|mk8','8cYO}6ZMN(1^^)~,pK^<tdv%4@');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(243,'','7\r\n+-wa2L>hc&U5DruB7,.v{Ik5G`c@+#dpbjl|K+6P9~p');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(244,'BEqx^xRnv=I,',';b-Y.\"pf\\:ro$Qwy|;xg`AD');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(245,'0v&qlKU43TP','g)[60*f&PvFo-2s6mlUlqG-Yt0!`\'ilX,$mW)$6rU4!W]JVc!W');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(246,'hp{A+9K[^~','e?w#%');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(247,'$\\qz!oGg1^_c)_','\"/qS@] uJ[@mn8-+V+t9EX');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(248,'g4o$6MpYI1NY&3[K\r\nKY 4ou','!4XLusvwui$%6/29d)\'G*`ikQIYHI),1%NpV!A]0DVo<&');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(249,'`r_Nxx26Dn;L[{ 5\"[nL\r\n','7R@~?cpRe^!\r\ncV)e83C:z');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(250,',FPAXnA?N\\Lgn&R4qqz:x_;3v|s','G&\'4vgD/)[K6*LCkCVCV?}');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(251,'n<#-}[tmM!v: |0pvR^(\"-;AL.v','H/\"AGIA6v~2+D+HN\r\nL[s/e>mOmr{G-nRx(K.NoIP/>bV:#');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(252,'41]}K3[beZ','gl.wZI]jzeV\'`alQ)gXk %sxvj2\r\n{`v}C~OB1\'.|YL]U2:');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(253,'','e _');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(254,'oEsJx(JH0Cs\'','Q');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(255,')*$Lycnfi/^s*\r\nN=/N)&$','YCWMV4){SWSB{2lfuK%IL__V7fS7B6S{/!#PT.S00m@uJ-Omn');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(256,'FSkX!qj5IPS+,o%NUwtHF[','\\{1A`*}8qe1HEb');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(257,'HEt#XJQ;_  ^>X[$XY~p|EnN^','yhOsKE:[.:UMw[:KtKdt~nVx`#1)!:;');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(258,'l','gHvl(');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(259,'C`!ZqWu$7H\'z~9kArP>]j E_aC^y','VNjc_&](Lv*V0K');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(260,'=?gzZxf5)* ',']1<.');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(261,'QF:XcseE','Q)\r\nrKY,4?A2sO}m\"&');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(262,'cAhe*3^9]JK','j[F.9');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(263,'(Cew(L8I;\"/WMX\"9\'S4xdrcfw;UE?5','i5SIV}&PKyRz\\#.,UW_Lk|L|A9V=$i!%&');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(264,'>zdW<@emeIni*`ydaP*)D','@1?DR\r\n6x[+S8EjE:I+d@R}t(.\'uB+n!PCy3iI^p5:');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(265,'ZG;I\\pmOxn','F~Q\\)1}J_Mw0Ci.{ul');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(266,'*AxvCy}Rg2NC;Uy4Jnzx1 ^C?qog_','>zRx');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(267,'wH:#4F5)0H>56#AOYs?)ZLQ\r\n%\\B','um:4');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(268,'hlNnQW.&R1K)','Qd`G4I|vVEyCGWloDw3QBr%D{H\"$L&)&Odo');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(269,'D])^p*Xcq-(*?;_k8q','');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(270,'','gZ?\\ki$[7(I9xS#?%pXv');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(271,'x-rrasFu9B8Z^C,c)O`1*!jMP61n#','eS\\d>>..)D6:}4Nk>GE\\\'VUS,H$2c`');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(272,'','B u{fX *%d&F/M}dGz-z_(5qzg;\\,$et[=fj0;B.b');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(273,'W}OySj','K{xGIDkf');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(274,'QE<Q]&V[2Z;Mj}','!zhd');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(275,'S2M!4Ud5h~\'Bv\'n\"Kq>B8n9Hkr','Zc(oUViQp6(n*&Ir^q3qZfWE)^ \\xm\\KeHa');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(276,'r\r\ndI3Yu?Ul&Wx5,lR%!/^','f0Z/}In|d9(@\'tfRf');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(277,'Y$,\"n@Dtk/VIg=m;tg:jw72zS',':\"2d+3$t$_%JVOl3');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(278,'zz?sl%{25xH715`Imn9wzbhLIcEJ;','if?7w{HS7j]U!r2');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(279,'1wH[qnd','rw');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(280,'0|f@6_r\'','rm&B]wJ2+b&6t');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(281,'\"8SZ[[b','K');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(282,'uaDH\\FJ|Y1yH>_<#:y[_%<]=','gi8:>OF1s,wmKfA~^gvxTe+Q$_4wCa_F$xCpMdC+_ES*BolT');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(283,'%hZ','B;h`$yGe0W7dD,\"ACUA2BPl-k}I@tI;UR\"L$L8#-');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(284,'!xwK:DnYRz>\"iYN^n{>\"&DGZ,PwUjY','N3L');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(285,'Kr@PwaKBR$GE$dfd^-|RBX85\\DP','\'I*1u|;cWw;W}Q{nW$aCufID%/PA3\"9j(ezN\"51WFD-shA\r\n\'n');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(286,'','<XNl@KyC6]MgnuoXpjW3VR#kH');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(287,'Jz6UkY=R]`d0<Ov1jTMONKz','VTg$ANh|2O@At');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(288,'=Q)QON&D$[x7:sL2ep','K$wile/>7Ss_R\\yytekjj{d>B*+\"51d^$?;1O\\w*2@');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(289,'E^UIr','s3Y.#Xo)a@4Qjkm:gJ\\');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(290,'D\\j9','$OP(+^(r6:v;eK/^0R*Ae)F');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(291,'0H;d,y','ci/ZDHBRR\\A>%$WHZ8J)kk6_~I=a2z?r)Xlk>7\"YaxGJwi[,#A');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(292,'','DCPE&5Yf;3:4m~-`F{o$FISL6lQ');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(293,'q NW><M6,hZ{q)p6#-MK @1{H','m`s~}p,S^}cs{2NEbv*coy4zVyJboc*Q>I|.');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(294,'@+vk!Oo!W%g16','$o+u{eKqdd!Pk00)\')=0la^UB#!KZMb`,4Oe');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(295,'g{;W&6^RJ9M Y','Zb=^+]Pu{%Gx)QTO}{exG}ZOOmn\"uqYH[&H4c=4');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(296,' 7','=EQ?e5SmOaUr8{OC9SG#pVE1B\'}=#2q-e]0R');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(297,'EnjC.`P\\K%I~,}3 %$j9:R}=7','q?!phon?j-Fsa3_I>pF)-W:J_x');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(298,'ua+C||/!KJRAy6rd) c^(Qe6','F<jNAAvXR^6\r\nY5 ]u?;\r\n');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(299,'=myY6LB-(Za;vEk[',',k^PC4/3n%R}]\'Z7WQQPMNX9USRN^6Ju~m9mS*lS');
+INSERT INTO `companhia`(`codigo`,`registro`,`nome`) 
+VALUES(300,'R<14PVo<w\\+_?alf#ul;0q`\"#dh','&XHGf1ApYQB\'ZJ11D\'v');
+COMMIT;
+
+/* Generating data for table aeronave... */
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(201,15920,108,280);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(202,26527,129,247);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(203,1240,191,270);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(204,13024,211,293);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(205,12052,21,287);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(206,19495,59,272);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(207,7949,175,204);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(208,8107,174,201);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(209,18801,30,207);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(210,15733,97,265);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(211,31287,51,226);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(212,17593,208,240);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(213,1645,2,268);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(214,3836,79,259);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(215,448,161,281);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(216,30070,59,234);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(217,21039,198,264);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(218,9797,164,242);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(219,798,66,206);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(220,11692,56,292);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(221,10879,64,258);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(222,12073,81,218);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(223,19439,58,235);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(224,14900,56,212);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(225,27139,87,202);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(226,5998,51,233);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(227,26874,30,286);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(228,7665,39,290);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(229,22199,26,298);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(230,4349,107,269);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(231,27723,207,217);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(232,28005,179,279);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(233,595,15,291);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(234,6485,0,254);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(235,8728,197,244);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(236,23831,78,213);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(237,7998,153,288);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(238,19592,123,273);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(239,6612,100,210);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(240,24462,18,243);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(241,3307,128,276);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(242,9464,121,253);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(243,12391,181,256);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(244,29426,53,296);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(245,28326,151,295);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(246,1880,115,245);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(247,20238,107,208);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(248,15735,188,246);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(249,27135,73,239);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(250,5931,178,209);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(251,8850,145,285);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(252,19400,153,263);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(253,27717,106,289);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(254,15679,30,251);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(255,3787,201,205);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(256,13710,149,267);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(257,10282,176,262);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(258,2084,107,257);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(259,13478,32,231);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(260,14559,5,266);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(261,28225,202,236);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(262,6019,102,249);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(263,11297,171,248);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(264,25530,8,238);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(265,792,4,275);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(266,7734,142,294);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(267,3697,56,203);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(268,23717,38,284);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(269,607,205,219);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(270,12705,121,278);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(271,32009,175,220);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(272,31266,87,283);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(273,26176,203,299);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(274,2454,184,224);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(275,4798,210,237);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(276,4762,23,271);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(277,16057,134,297);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(278,3244,50,261);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(279,8218,170,255);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(280,5147,0,282);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(281,6405,49,225);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(282,7398,195,260);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(283,18401,158,241);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(284,2408,180,214);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(285,19406,115,232);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(286,17835,175,228);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(287,24077,60,222);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(288,16272,75,277);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(289,3412,20,211);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(290,15261,125,216);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(291,29710,118,221);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(292,22588,206,300);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(293,26730,188,250);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(294,2381,194,223);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(295,8972,145,252);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(296,3557,101,229);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(297,24673,73,230);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(298,13468,149,274);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(299,5936,37,227);
+INSERT INTO `aeronave`(`numero_serie`,`modelo`,`qtd_assentos`,`c_companhia`) 
+VALUES(300,28924,24,215);
+COMMIT;
+
+/* Generating data for table passageiro... */
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(201,1535236757,',D<]y=q9%!MPam2_7TSj\\[','QKZiU,pU#d^`\\Nz>D(E)RGQ6b');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(202,708156194,'9Q8J~&w\"x^P)HzzOrKHqL\\TD%',' p/@drh$}Y&[YR&{?E6b');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(203,626780884,'\"$','@IC)_=F,+z XKWtwi?$3efc2^VIPnVU*HC:Om.R\\');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(204,899028853,'tp','p:~}2kFPQ,__');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(205,282992079,',?x7!16[DWgaE2l${s\\+.{?iqE)*A_vVh\'v|(3V7','E%KoR:UBfyV|QA,dHr2bT|');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(206,1719077295,'c0k%;NAs.1_VV<qrOhWkf6e6xSnNRTtN','^4bl9;M%}Mhc7');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(207,287110327,'WD','z\'V[:?G9`;8X7Q*5U|iKXakX_]9/y]39`4r_c,');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(208,67511080,'aORd\"z]\r\nj=|Q*CfA','S~8+U~e1vAx8r@dco<\'8zv*#VnOMNy');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(209,787355944,'ln0*#VC/N/wx>','9$tnTeg(I&+]vT9%[j~W;^Z0pw@Z}eLE>JH3YWVT&z``M=Ik');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(210,297117994,'W?;','\\');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(211,762645883,'mv_jKwTeE=BdmvMkclV','`SF53yUg9*');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(212,1606950285,'Zq9>T\\8hnU]!I:DuM+ZFl0@?oZ<R7UVh','+QUz,7/` UNh`)jt>HTlncYITeTg??xRd){ES');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(213,1259095323,'Qdm3k1-sh;I1Eu@{L^uwy08+','kLPfP_Gwl(dNp$cvP>X1RZB(Wx|:po&');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(214,311236123,'i\'Y,]+\\l([$SSm qH1XJ>ozE]4qRDI+JW(dEz?1X,','|yYMU+hHe_3F&2.bj1%\'D\r\nL```CG<\'X^YF$3icv]/');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(215,1822838816,'tjl.=Vs:s%.?VsQZ$Cr3xj',')TWOG#&{=q CzAO4Y');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(216,450272410,'lGnXYj+Jq~t_;KzT@C_xqV%\r\np98[','rarqu>nbEG?,~#Ka7[CEb=s|{i');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(217,2143506489,'Z/mR!iq.y|8+qlwm/DanxX,hLk','@Ni~>w=Tsu2kuhR{_p?>Pvi#z\\%mWE\r\n0g\"\\0[XP');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(218,1875382198,'6*Vqc\'W=[r^^','L<LeP /1uF\'us7=kL.:');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(219,931114767,'>V=OI@n+Z*tY1:20\\2o\"&y-?ieuf\" B;9YzU',';]G');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(220,532553280,'7HbHg6i ,6bi$WUvL','#}t<AgkA:rCTadk$jafb:^\'_uMi2v{*&t.S|_I');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(221,2058619911,'}4','*t{tnp[e=d{L*3QJUB[![?)');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(222,1115807360,'n=C &&%0OR1FZ0^LSUCB!lVYK!r`-A4pTD','(');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(223,1547093916,'g]%%3@iow%PSS/','12U~e\\y.:?*W;X4xvxp');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(224,275448336,'Bg0)o\'r@%p`T{b_1Ur6DZ24i4Ayy;\"zE7FrfXRF-[#[','QO{]5ATl,6#\r\nI%d$O3Pkwbk!n3J$h=');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(225,1632923867,'L*0.F~n4^\r\nOc.;n|mwqCZ+ nZWg{5)3]emKf','aq\'M');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(226,1857907656,'^O/4*\'LjO){<]6E5D%pD`{nP/ojewG\"u\"','{dsE$,nyIDioSN!.$E#6ux>;*,D|EoYfIA?1Dv[n3xJkLD4');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(227,1441747012,'\'$\r\nuZ$_7MSwrx~lXm1b jtFv \\ku9+f,,mdQ|]','owQu zG8Dm');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(228,1384041583,'+;<`$`C1yiqW|Kqpk6/Ou .B\r\n','~kJn/gX<r7p48qm?+\"\\96 X;9/BOT!l\"N\\ss');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(229,44021177,'f4x\\~PfR6H%KY-qN^K`,C\r\nN|=9E3*9W\\c#j`ERx','u9eO%MqG_+LzsdsztG6%V}i=\'8n-\' ');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(230,1129547271,'29A9[0I`DH3iqfD>RR\r\nwv);S','Si!#gnLm5\'ON#C');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(231,545544217,'','3E4\'9yVV?2h[#JnVS!~~Cbvex[:.[J.B/R=\'[wJor{?7sNyk');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(232,1353966076,'z\'/atV<5q9XOL%hx/R[5\"IV9] T`l%i6`WY{bK;8&HE\"&C/&','G9E_dPS');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(233,1371115720,'nKWln9[4m|~\"GsB|?AZ \'Y}+]?xg?nw$E+c\",!(G:\\*C3d.L2M','(]gY#l,j6*t5#w3&FcGw\\c.jNvRuu|');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(234,1842373730,'1o99uWAur;N34cB5ZAy(0_','Nrj\r\n[ry5N8r83,BER_3Lz%{7|E+<IS:}{qO q?Lt5B<l~=[!{');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(235,208574017,'Z#C+RX88AL,VrzRFvW9g','[,\\j');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(236,810191815,'h#Q  ]%+cC>','bT\"xd');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(237,1847512725,'B8J(e5knR4hMSN:|.lo.r%V.DycB','b&_Z|IR2%@#Iu\r\n~Vt;i?zo<fI\r\nl!/o&');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(238,680317102,'O[7R8l','pf*\\boYi@#pNdjAQ}Jqg>RQQ%r+\"p8TJZ97dS\\');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(239,886596686,'\\e9(%y#ed','}<?*`<\r\n(8<6uzIsn!ju](jnBT=?(n8!&tKbnxSN');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(240,1788958716,'$nZ*bhDynQ]i;-}.','DImkX.Jc%\\a.\"w\r\n0<\\=uC');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(241,110598165,'S#?|1A~;(@{TJ<i_ O*c+wn]q*.','B');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(242,1250004500,']gG1H`BpftMaPI+RBvAv/3F1frrb?<)(Z/&;%<YAISs*odv','9Jwr\'[$YGX}-UOwz\r\nE[nMw,@');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(243,2140596546,'[-^MOZ|V\"plL','*_\\\'Y\\-S8 }dk9M)td`2L[t;Vl`!x|;-]-\r\nwL-~<Dj');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(244,212610431,'i]>89WU}o[2wpEV0o{NOUzt.uYIwnBp2>!Rl\'','\\yNu.');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(245,2078208856,'Kup','iy`W%=Igh<kJRqa#ohly]a1?MYRr9nOwkJ5:d#qM=pVM__v(U]');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(246,1782207984,'3f&]?!;OFP06pnpJ$1R\"-oh3Hm?TpK\\k`~@\\~',']u]7EQx oF(zx,Bh4v/\\-Af,c-305<|hkjp9&mG{+zKW&');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(247,467678732,'>Kq)uLU\"<YjkQ52@N,?O[{$X[WA^ qT;j.eS)98@.7','I.3GxDL=au=@D{6+vLY[3)@3_])\"}uBXL;f');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(248,486300704,'#(51y!0cr`~m@t7l4~dDfn1tQ`MQ^of%F3$0=G','\'u\r\nJ;\r\no(j]#6Unalb[2l7f;bV#z0#}HG$bf{\r\n\\hTFJ}oUhi');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(249,2080655293,':2G\r\nVU=VR\'9KK+];3}lx','6\'aH<KlGa4dI8_f$m]');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(250,2097285350,'d4','4CB=');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(251,278295592,'+OLeV^H9*J\'yL)r[!tdX ~1QEf/3~V<iE','J_XVMl9');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(252,94631578,'?O;o)2v1`(TG%CN2_i+%[pm ,L)J1KT/g','\'iyI\'hQ96K|wd7J0z1KZ! da>*ac )z&Lo\r\nxq!SS62~!0(# T');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(253,1335032666,'','U{nUB8D)qw9s_&!\":<\r\n\"LMlGy');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(254,984873606,'mcBVOrqUcN3U;I)\\EO_Hv5\'z%ER2683>:lN,#h@','zsX\\[jck3G+~W%>8');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(255,2114228613,'+.|c<*59-\\0sWN.m-}=}9L>vG>&.OPG','8$&taGn}-A^ha\"]l%fm(_yY');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(256,1575875429,'4*1Kvq\\oP','vm:9k\"S-ihvP\'ckpo1aF;*y|MZ-Q% _o:a5Iz');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(257,822516752,'&.w^8/uPc@6a&ZqcI=2i<y7~7fkvR*,F0Yf,R}f`','|\\KH<b*\\0^I#Mr');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(258,686815125,'K9va>?Tr7l4-`;QN!s[4Sv@`UV:','wZKPh](7wgn%UfKrd^twnD_3.ww6WwD/');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(259,577203250,'kE,^d72!w0Hi$h~b`MI,|vK./VhBgW','TcH\'`!kr/v!-B?dfN:XYg<SZ=SX/1D*mB6S\\^,I0/1^$');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(260,871389251,'*zS1<9z,5Y5@%*VBnoVn','C<+(2X.wU\r\n}? \\cd5NCNY->JM%');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(261,1748152664,'JRPOs6-2oUo\\oIr','@H|l\\xl*`KM^!6');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(262,1478049241,'L!{clb1eU+HsE?0OYna;\";MyV;WX\"i.qGfk$}W|','Mb1~V');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(263,1630248638,'wm8w1)n(fNUfp)Q:0Gm*d1\'5\r\n','k+_`[}wcc)?aDX7VK=PzOqK^?+=P\"OJ1xw,eA*d*H<I&l');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(264,1992490440,'8j5/B7_@Bhl(.1SE/\\sF?0','t!~\r\nil%yJd8FE[M$=Kv%hh/-#bA3tLB[th7)1^5QW:_');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(265,2074317409,'zy<!y','?\'5V,7e;\r\n)N-rDB!wLZ1v(z=-');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(266,803167665,'^','c8!N6u  U$ryi:9NO93/y');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(267,1904224260,'QT0\"hsDK9_ul$WwW MaX7=$/\"Fb|b?<dpxSGdW3H`D|)','W@Q9Oep');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(268,348346579,'s>k{Gk@+]M)j\\H=Jg]yxHyiSI3`i-4.','SM1jSO');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(269,620531531,'B}','B+0Kq3%>BS3x6&1.w!D*');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(270,1092851685,'Ag3.kLSz%GQT,r</YgjBQ[&SO\"o0U','`A8Xc$.z A=15Xf0vst{1iI?&r+L&ZHR*b-8@a@\"');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(271,130637004,'p1V@?[N?5pH^q\'>4X<#+;LZsMjRF=!.n+','x\"[6|n5gO+BWwK?EI[98sL9Jj#_1!S05bt2oWeTG');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(272,887838994,'OO','fBuhBYS/}XB}x');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(273,1193592802,'w%cL-]DrmC1UW.VNw','i.8j\\K$>E%iaN6`.VuC/Z?)\\H{Ho*icx;e]s,');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(274,1069476587,'','YLr.GVV\"6?hG{#$f*jcrh<sHy|UJIpKC]@&y');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(275,254872319,'o&R?#\\#2H-:*UeFoA4\'3dn;yjCp','}{1yQC+f%g3&Y/9bv\'6F$+-Hp:~j&gtS0tg|M}:!({(lM');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(276,1556673315,'','`j;FimQQ');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(277,215133804,'DTLxz2PWD(U(:t!.f$X\"!NZ}k-5JAWe{02KZdMS\\+J,BY8o','8_b@tUt+|,nYh-O.EC7N4?)\\xe[p(5');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(278,1538865927,'+:cATbhW_-8Z@vNY,BaC~@JbeRN`r\"Uc6.pszBY','*6VAU?!n(}?Z|!XhY1aVqC\r\nc12JZO^XthN/tCr%K48a|');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(279,1574074268,'t=XmedpyF;ko3L-\\n|Y,-Eh','d7\\\r\nl~c0=.kbrU@ogqyPj3y\r\n\"tmI!iG\\|D7A lW5fHkj!');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(280,615174883,'T3JBM2d!P^F<&^<no.TSoUeG+M2qc@;LW\"l%','~7M!yp::SVh:&&[:C)eo?\":^ie');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(281,1257981923,'NA`km7T{o6@woSkPlV','W3A]<#G9HO4Os1RZqWEL]tM^[ys3)Xvi.[<&S');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(282,925675146,'o<4*4U=$&P8v((d&','b?{Y-I 2aN|tSNmdatJt6hE ?5WhB/;O');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(283,1450639954,'%wBL;ssD','uh7WZ|ng,lM3\r\n[B');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(284,523862487,'[l8EBX`}W7]?IV%$8YP_l8x>S(hR','J5f7^');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(285,2021349956,'1%4UEEvc-E78e.+`|C\"$6dG/MC<trslAa.L%kPL:0y(p','o');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(286,1784898599,'3(','N(:FxAd}9W`*c|N');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(287,591688450,'.5glZTj^U}6g&Z&P','iB&:UjOczWlpR1sxlP;1\\E1BY~P');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(288,1658493540,'q#VSuaW(~3tYzeq','CqHlsrS');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(289,2110672367,'V?~7PXU/Ev dno y^`Fk','*G_S$gt0ryAW@lJY!5tz*)x8e<2v=go~Qph@\">;i\"]:');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(290,1935591023,'>OWE:jSc?BeHAN5M8M+Ku','{J`u');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(291,1396038805,'buI+bHses9M-$:IL','uBI^smA(,U_rESg\\)\\|UqV');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(292,1965352160,'#C~;_d x 46i~@j%dT]\'Im#pn9\")ODQ?}=s','#TLCH+tEDV[t-o');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(293,1227778613,'2pZuC&rt,>LlPm5b3OnuZS9Pn&$nFB#n','V`7`m6qw01d&l]{z4c&{k3ji[}~9A_F\'y\"');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(294,104784668,'~^*TS9ix5L&\'0RP40Gp5u(*5UX[','en?-6');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(295,179324536,'K1&^|O!N#4iCi','37O*tvY/}M>%,vtK');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(296,987919811,'C68','<(&~S||\r\nWICm%&nD{FGS/}Z`:UY\"wq4');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(297,1772188520,'l:NKSit\r\nd[\'Bgkt@\\4=<b,Et_7s','sKp.LJBvg-;](3kt6aN(Xh8a\"*tMJA,V^P5ApUF2CS>zeXD8z');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(298,1721755397,'0_deg','. A=gjqJ,eoe[YEYX/y&<cB;b');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(299,200814054,'k`$t@zw^zBB|!&\\%FMgW/iQ!vA7}k^k,','Fv|aZ1`Xhoq8rxl$K?N`e6pp4');
+INSERT INTO `passageiro`(`codigo`,`documento`,`nome`,`endereco`) 
+VALUES(300,1384996141,'C;z}gqjegPOiJ(i@ug#4F2-eBwwj,28G@(Y','q]B3 Y|F+#mo&4m4aXbJ7~,');
+COMMIT;
+
+/* Generating data for table viagem... */
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(201,'Abobora','Agua Fria');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(202,'Agua Branca de Minas','Abacate da Pedreira');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(203,'Abacate da Pedreira','Agua Clara');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(204,'Abaiba','Abaete');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(205,'Acarape','Abre Campo');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(206,'Adhemar de Barros','Agua Boa');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(207,'Agronomica','Agua Azul');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(208,'Adrianopolis','Agua Boa');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(209,'Acegua','Agua Branca');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(210,'Agua Boa','Abadiania');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(211,'Abel Figueiredo','Agua do Boi');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(212,'Afogados da Ingazeira','Abuna');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(213,'Agua Azul','Abobora');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(214,'Abelhas','Abadia dos Dourados');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(215,'Agua Doce do Norte','Abatia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(216,'Abadiania','Abaetetuba');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(217,'Agua Azul do Norte','Acupe');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(218,'Acorizal','Acajutiba');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(219,'Acampamento das Minas','Acarape');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(220,'Acarau','Acungui');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(221,'Acungui','Agrolandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(222,'Abelardo Luz','Abdon Batista');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(223,'Abaira','Adao Colares');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(224,'Acu da Torre','Afranio');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(225,'Abraao','Agostinho');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(226,'Abreulandia','Abaiara');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(227,'Agua Branca','Abraao');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(228,'Acupe','Adrianopolis');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(229,'Abaete','Abadia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(230,'Agropolis Bela Vista','Abreu E Lima');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(231,'Agha','Afligidos');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(232,'Acaua','Acu');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(233,'Acailandia','Abapa');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(234,'Abare','Afua');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(235,'Afligidos','Acaua');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(236,'Abadia','Agua Comprida');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(237,'Acari','Agua Boa');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(238,'Adamantina','Acreuna');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(239,'Acara','Afonso Cunha');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(240,'Afua','Afonso Rodrigues');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(241,'Abdon Batista','Adhemar de Barros');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(242,'Adolfo','Afogados da Ingazeira');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(243,'Abuna','Adrianopolis');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(244,'Abatia','Acopiara');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(245,'Agostinho','Agisse');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(246,'Agua do Boi','Afranio Peixoto');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(247,'Agrolandia','Adelandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(248,'Agua Branca','Acarau');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(249,'Acucena','Abelhas');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(250,'Agua Doce do Maranhao','Acucena');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(251,'Abreus','Abel Figueiredo');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(252,'Agua Clara','Acailandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(253,'Agua Fria','Abreus');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(254,'Abaiara','Abilio Martins');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(255,'Acrelandia','Agrestina');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(256,'Abre Campo','Agua Branca do Amapari');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(257,'Afranio Peixoto','Agua Fria');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(258,'Agua Boa','Abrantes');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(259,'Acopiara','Abreulandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(260,'Adelandia','Abaete dos Mendes');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(261,'Agua Boa','Agua Boa');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(262,'Abapa','Adamantina');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(263,'Abreu E Lima','Abarracamento');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(264,'Adrianopolis','Agua Fria');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(265,'Agua Fria de Goias','Abelardo Luz');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(266,'Agua Comprida','Agropolis Bela Vista');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(267,'Acudina','Agua Branca');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(268,'Abadia de Goias','Agha');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(269,'Acurui','Agua Doce do Norte');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(270,'Abaete dos Mendes','Agua Azul do Norte');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(271,'Abilio Martins','Acudina');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(272,'Afonso Arinos','Acampamento das Minas');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(273,'Abarracamento','Abaiba');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(274,'Agua Fria','Acurui');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(275,'Agua Branca','Afonso Arinos');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(276,'Acaiaca','Acegua');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(277,'Agricolandia','Acu da Torre');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(278,'Agua Fria','Afonso Bezerra');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(279,'Afonso Bezerra','Adustina');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(280,'Afonso Claudio','Agua Fria de Goias');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(281,'Agua Boa','Adolfo');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(282,'Acu','Acara');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(283,'Agisse','Abadia de Goias');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(284,'Afonso Cunha','Agua Branca de Minas');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(285,'Agrestina','Abare');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(286,'Agua Branca','Afonso Claudio');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(287,'Agua Branca do Amapari','Agua Doce');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(288,'Acreuna','Acorizal');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(289,'Afonso Rodrigues','Acrelandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(290,'Abaetetuba','Agua Doce');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(291,'Adustina','Agronomica');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(292,'Acioli','Agricolandia');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(293,'Acajutiba','Acioli');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(294,'Agua Fria','Abaira');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(295,'Abadia dos Dourados','Agua Doce do Maranhao');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(296,'Agua Doce','Acari');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(297,'Adao Colares','Agua Branca');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(298,'Agua Doce','Acaiaca');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(299,'Afranio','Agua Fria');
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(300,'Abrantes','Agua Branca');
+COMMIT;
+
+/* Generating data for table carrinho... */
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(201,205,'2016-03-21 22:03:27',236);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(202,254,'2015-02-11 00:42:18',215);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(203,293,'2015-03-14 05:20:46',209);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(204,300,'2017-03-19 13:14:04',218);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(205,208,'2016-11-23 02:42:51',261);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(206,207,'2014-07-09 12:32:15',249);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(207,251,'2015-03-11 20:29:15',247);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(208,206,'2017-04-03 00:19:41',259);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(209,295,'2014-08-16 06:41:18',264);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(210,239,'2015-09-11 02:08:59',288);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(211,221,'2014-05-31 04:59:35',216);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(212,259,'2016-01-14 13:21:38',227);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(213,298,'2016-06-10 13:24:12',287);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(214,243,'2015-06-17 02:53:44',297);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(215,233,'2016-11-30 15:15:14',252);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(216,234,'2014-04-25 01:25:25',245);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(217,248,'2015-11-22 08:10:41',211);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(218,286,'2016-09-19 18:31:48',223);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(219,268,'2015-08-02 06:39:40',208);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(220,282,'2016-06-24 19:32:51',294);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(221,255,'2014-05-21 23:48:18',203);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(222,230,'2014-03-13 06:39:37',235);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(223,299,'2017-03-23 19:55:46',246);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(224,232,'2015-12-29 14:54:19',283);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(225,214,'2016-04-21 03:37:50',230);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(226,257,'2016-06-09 07:41:59',282);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(227,213,'2015-09-17 20:55:45',214);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(228,249,'2017-02-06 22:30:51',274);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(229,238,'2017-02-05 14:07:46',299);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(230,225,'2014-05-06 11:19:17',262);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(231,209,'2015-11-13 18:00:40',269);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(232,250,'2015-11-14 02:26:27',266);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(233,291,'2016-06-08 14:59:10',292);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(234,240,'2014-10-10 16:24:37',254);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(235,237,'2015-01-14 00:50:14',207);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(236,280,'2014-04-10 14:30:08',271);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(237,279,'2014-09-16 02:40:17',276);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(238,274,'2014-04-13 20:31:01',220);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(239,217,'2016-02-20 12:42:24',250);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(240,266,'2016-01-24 10:28:16',278);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(241,253,'2015-05-11 23:31:14',242);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(242,288,'2015-07-06 10:48:41',277);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(243,264,'2014-06-13 20:23:07',232);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(244,204,'2017-03-17 11:46:37',206);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(245,242,'2016-12-21 08:18:45',267);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(246,269,'2015-09-30 04:32:04',298);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(247,211,'2015-11-11 13:26:03',253);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(248,267,'2016-08-05 00:42:39',260);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(249,244,'2014-06-04 04:20:47',210);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(250,228,'2015-09-11 18:57:06',234);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(251,275,'2016-01-26 21:02:08',275);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(252,285,'2014-11-22 05:07:38',273);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(253,290,'2015-05-26 13:01:14',291);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(254,263,'2016-06-12 18:48:29',279);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(255,201,'2014-05-28 22:19:25',285);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(256,219,'2014-05-28 16:38:51',201);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(257,210,'2014-09-08 08:54:39',217);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(258,215,'2014-03-28 09:16:43',255);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(259,296,'2014-04-05 14:12:38',286);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(260,236,'2016-10-06 06:21:52',237);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(261,223,'2015-12-03 20:20:54',224);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(262,245,'2015-06-13 10:25:20',221);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(263,226,'2016-06-28 20:42:55',263);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(264,231,'2015-02-28 14:02:35',272);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(265,235,'2014-04-14 07:29:52',280);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(266,218,'2017-05-01 09:08:12',265);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(267,256,'2015-06-08 19:47:34',226);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(268,294,'2016-06-17 22:49:29',268);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(269,227,'2017-01-17 17:56:08',284);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(270,262,'2015-05-26 08:36:31',296);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(271,284,'2016-10-02 03:39:39',281);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(272,246,'2016-03-25 03:25:55',239);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(273,265,'2015-06-14 19:43:38',222);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(274,270,'2015-01-02 07:16:12',231);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(275,276,'2016-03-25 04:37:40',295);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(276,278,'2016-06-08 07:52:03',244);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(277,281,'2016-11-14 12:00:26',219);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(278,289,'2015-02-04 03:14:53',243);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(279,241,'2016-05-24 14:25:19',256);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(280,247,'2015-04-19 00:37:20',205);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(281,287,'2015-07-01 05:03:18',229);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(282,212,'2015-05-20 00:19:15',258);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(283,216,'2016-12-09 13:01:11',290);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(284,297,'2017-05-14 03:22:28',257);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(285,252,'2016-11-19 13:52:29',233);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(286,261,'2014-11-29 15:22:08',204);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(287,202,'2017-05-06 10:58:21',289);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(288,273,'2015-10-10 01:11:45',212);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(289,229,'2017-01-16 17:16:20',238);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(290,222,'2014-11-01 15:19:46',225);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(291,203,'2015-09-08 09:14:09',300);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(292,258,'2017-02-18 18:15:06',241);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(293,220,'2016-03-04 02:26:06',251);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(294,272,'2015-10-12 23:38:55',240);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(295,283,'2016-06-22 20:29:47',202);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(296,271,'2016-03-05 03:00:28',270);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(297,292,'2015-10-14 23:00:25',248);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(298,224,'2016-03-18 12:14:08',213);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(299,277,'2015-06-11 08:00:09',293);
+INSERT INTO `carrinho`(`codigo`,`p_codigo`,`data`,`v_codigo`) 
+VALUES(300,260,'2016-03-30 02:55:44',228);
+COMMIT;
+
+/* Generating data for table reserva... */
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(201,'J=dwH*\\DUOe~',225,270);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(202,'!G{R~#{)6pS*koF',250,259);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(203,'m-YrR)bV',219,226);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(204,'TKW',241,296);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(205,'E%uM+&F^5GytPEpkeLPonPTv1rc4',233,215);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(206,'VN\"L@~\"z',287,284);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(207,'D<-{\"FwWBq@',210,236);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(208,']~1{\\.\'bZ[&3,Y3-jB(nEAp?#cSW<',300,239);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(209,'LTU;O} !NHniUCdNh',299,257);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(210,'',224,223);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(211,'{',259,248);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(212,'~',273,294);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(213,'r,3w@ \'',274,249);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(214,'-Oth',262,288);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(215,'U|duA',238,253);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(216,'xOm\r\n#',218,209);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(217,'ua',271,224);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(218,'O',264,251);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(219,'^L+vSzH1d5AQPe8siR-eJ1lv]r_e',214,271);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(220,'V@',237,243);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(221,'{[~\'mX-^,{gY',242,258);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(222,'N<eqShyPQlw~hwg3krID*-UIIY',204,210);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(223,'gamV-.K/,eYo^p>=qoQMteYbN]L*',288,295);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(224,'8~P2h*x:)FygC\'2\'\r\nsH1\'Ame=;',206,285);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(225,'$CT;(GyK )2nN7mo#-HVh%+',211,291);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(226,'([dV}qr*4',244,290);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(227,'b]hg;',298,227);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(228,'Tp!n!(',223,219);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(229,'RJy=!IJ+ZZU.$=8PI(/s0',235,213);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(230,'+x)B\'6m\"Rk0c[u',226,279);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(231,'K(kmUM3kA AB?eGyDuV+cC`',228,280);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(232,'MpFL:\r\nJ0#Oc#DjuVi#',221,246);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(233,'@ic',279,256);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(234,' z\r\nj00xnGOIuOenJx@S% ^j5?~yK\'',263,230);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(235,'D9jPGhQ{8M@t',257,238);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(236,' ]PPSkJW,-N',251,203);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(237,'`=zrJ4qz0HW\r\nic]sso',255,269);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(238,'ES1!E0FG0^AI=92!%)4-',212,202);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(239,'h',240,274);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(240,'7RMR2sF@%c43OxRypn',294,297);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(241,'q?U<fa.D82HgH,]\"\'v~cA9r',297,289);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(242,'T|aJ!yo%(D`5[I.4=c\"[YQu',256,264);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(243,'',209,273);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(244,'AZX@[nhj;IMsKJ_m)Zf[uJ',248,220);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(245,'*2xS=0bQ#Kl(nP',217,229);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(246,'r;1\"u.in&?~cNeo|,\"9B8RFyP1',247,260);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(247,'=EvX20Q_(kz8v',239,255);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(248,'!2 dLMa',222,247);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(249,'K^_P4FR&*$?qt',266,254);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(250,'G\\!LH\"h_%AYP}a',229,278);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(251,'fiDwc7b7/6&QXKMDzXds^CW\".9M7+',252,216);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(252,'U6I/h',272,292);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(253,'M:1N-fh',286,241);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(254,'7\r\n>I.JO>c)N(Wj-eK?`3L4>]Q',276,245);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(255,'p\\|bjy82~;<`L6bpb7<e&',232,275);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(256,'^& ]~:',215,242);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(257,'X5Q$G+jf\"+z$p~%Qv*Y+s#.MbZzC;',291,268);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(258,':0F5Nncb6EZI-\\Az*QM;l-]^2',261,287);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(259,'K4/<[lB3sn$a/E',281,201);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(260,'w?os.#^-Js#F f5>e@',230,211);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(261,'b',258,272);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(262,'WSB',292,206);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(263,'p6*z6r$\"{/P(C=L',231,235);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(264,'b|rf1@^!v~q/RY(IZ[IX',201,232);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(265,'*;jK7z]+Yr.(Zgc',269,261);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(266,'C6Km',220,233);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(267,'N+m4!\\!Cu.bxa',260,218);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(268,'\"A\'hcn\"@[%W-%q-E~ya=@ru^H',290,204);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(269,'X+\\0|]?',283,276);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(270,'~L^YWy.Z0!&X^.E(w}nnUmdXT',227,262);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(271,'C&Lu)\"#k;H0>(',216,281);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(272,'9h_',254,221);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(273,'b8]\"?`5\'*=9aK7,2I%O\'',213,252);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(274,'cVc[A G3QVoIj@?T,$\\',278,298);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(275,'+mi%r3nB',295,240);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(276,'l>xf0*^A@,b[!9Xe#Ih1&NbW6OR$M',270,286);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(277,'zOT?M 0Uw#bm5,sr',243,299);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(278,'aD\"Vv*O^3J[}JG]NM*+wA<[u7b',265,293);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(279,'q?*W19[El',285,234);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(280,'Pl{',289,283);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(281,'S\r\n',267,265);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(282,'u.cF#YW>gcsj{D6B-9iv|n.Y/6 6i',284,205);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(283,'m03C|1t[xPIkLX];K<fa_f[7ap1w',245,267);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(284,'Mew<Y2C$kkp[0&2b[b]lU;g{',253,228);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(285,'',208,237);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(286,'W1\\1L',246,207);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(287,'W*#`',277,277);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(288,'B',205,222);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(289,'o6<t*IO{&A|Mq',236,217);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(290,'rZc&`\\8e<QW)|@E^l(*_C<[0^l^',268,266);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(291,'.9I>-[\"=J35dnG2-0:.x; l6?\\',293,231);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(292,'/`/',282,212);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(293,'js~`9N?%2;$312QFWj}]7(g6t?>}m',207,282);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(294,'*@^ wK',280,244);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(295,'Nz=Bt%o|X],r3\'{cKr -piJe]',275,214);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(296,'s4mxq!l85>I',296,250);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(297,'t#.1ZF >',202,225);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(298,'F\"~\\RcM+<a',234,300);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(299,'mu6\"h,',203,208);
+INSERT INTO `reserva`(`codigo`,`status`,`c_passageiro`,`v_codigo`) 
+VALUES(300,'kof3id.~>^RRQH3_3f0MQ0qq',249,263);
+COMMIT;
+
+/* Generating data for table assento... */
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(201,11,245,217);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(202,20,217,244);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(203,9,216,203);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(204,15,265,291);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(205,6,248,219);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(206,6,243,298);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(207,11,212,238);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(208,10,236,220);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(209,17,259,246);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(210,7,240,251);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(211,1,227,249);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(212,5,246,207);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(213,18,232,226);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(214,2,258,266);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(215,20,260,280);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(216,7,292,215);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(217,15,214,208);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(218,3,222,257);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(219,3,290,281);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(220,20,250,262);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(221,4,215,297);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(222,8,287,218);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(223,6,277,284);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(224,14,267,260);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(225,2,233,259);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(226,8,223,254);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(227,2,220,275);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(228,0,286,292);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(229,9,234,240);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(230,12,210,261);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(231,6,296,214);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(232,16,282,223);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(233,4,276,221);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(234,8,289,247);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(235,18,204,252);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(236,5,281,274);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(237,2,262,267);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(238,10,284,235);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(239,5,268,236);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(240,2,221,216);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(241,1,238,222);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(242,8,278,289);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(243,5,291,206);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(244,6,261,264);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(245,4,254,293);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(246,20,293,201);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(247,3,244,229);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(248,1,280,233);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(249,18,285,213);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(250,16,241,241);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(251,18,299,225);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(252,1,225,211);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(253,9,211,230);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(254,2,255,243);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(255,8,264,278);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(256,10,297,255);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(257,7,237,242);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(258,17,263,245);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(259,7,224,210);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(260,16,271,239);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(261,3,209,205);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(262,7,275,202);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(263,3,231,268);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(264,17,201,269);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(265,0,256,295);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(266,19,298,248);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(267,14,242,253);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(268,11,202,283);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(269,16,294,212);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(270,1,239,265);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(271,7,274,277);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(272,16,213,256);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(273,8,247,263);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(274,4,226,224);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(275,9,228,287);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(276,0,300,286);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(277,0,208,209);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(278,13,206,285);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(279,8,270,294);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(280,11,269,299);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(281,6,219,234);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(282,20,266,227);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(283,5,230,237);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(284,2,252,279);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(285,7,273,258);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(286,13,257,282);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(287,19,279,232);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(288,19,207,270);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(289,1,251,228);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(290,19,229,271);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(291,10,295,231);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(292,16,283,276);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(293,1,235,300);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(294,8,249,204);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(295,18,218,296);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(296,11,253,273);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(297,2,203,288);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(298,11,205,290);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(299,3,272,272);
+INSERT INTO `assento`(`numero`,`classe`,`n_aeronave`,`c_reserva`) 
+VALUES(300,16,288,250);
+COMMIT;
+
+/* Generating data for table voo... */
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(201,'IW','IP','2015-08-08 07:32:31',244,295);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(202,'IS','IY','2016-10-27 08:57:16',287,229);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(203,'HL','IK','2015-10-29 19:13:51',211,231);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(204,'JB','HQ','2015-06-20 04:04:12',265,255);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(205,'GU','HF','2016-12-27 11:24:45',236,260);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(206,'KE','IE','2015-05-31 05:32:54',266,293);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(207,'JA','HK','2014-12-06 23:13:27',213,201);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(208,'IX','KI','2014-03-17 13:29:16',258,246);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(209,'IO','HA','2015-08-13 06:38:41',241,232);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(210,'IG','HW','2015-01-31 12:56:09',269,296);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(211,'II','GX','2014-12-17 19:47:27',240,274);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(212,'HO','JD','2016-01-04 15:22:13',212,234);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(213,'KC','IT','2016-01-21 00:59:37',242,205);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(214,'JG','HP','2016-06-01 11:31:10',252,280);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(215,'IQ','JP','2014-12-20 14:15:58',297,261);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(216,'JW','HC','2015-01-07 21:08:25',234,206);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(217,'JQ','JZ','2015-06-15 14:48:04',209,245);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(218,'HM','GZ','2014-05-15 23:23:11',207,272);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(219,'IH','KL','2014-12-13 13:06:44',290,266);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(220,'JZ','IX','2016-10-13 13:22:56',220,283);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(221,'JI','JL','2017-05-04 10:27:02',268,233);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(222,'GZ','IM','2016-02-18 04:38:14',261,254);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(223,'IP','IO','2016-07-14 20:07:14',282,276);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(224,'IT','JG','2016-07-08 18:55:08',264,218);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(225,'IB','HE','2014-05-03 15:19:04',237,223);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(226,'IR','IB','2016-09-13 15:12:48',255,284);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(227,'HJ','JU','2015-01-08 10:06:58',281,238);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(228,'HS','HX','2015-04-08 03:23:35',219,291);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(229,'HZ','JM','2016-10-23 06:13:36',230,252);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(230,'JF','HZ','2015-07-11 18:13:34',221,278);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(231,'HC','HI','2014-11-19 00:09:31',291,287);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(232,'JD','KE','2016-03-13 19:20:30',296,279);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(233,'JM','JH','2015-02-26 11:23:58',254,215);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(234,'HX','IU','2016-07-12 04:47:03',300,236);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(235,'JJ','HU','2014-03-20 02:14:51',204,237);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(236,'GT','JV','2017-02-17 07:46:37',298,230);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(237,'JN','JJ','2016-10-27 21:54:47',246,242);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(238,'HQ','KK','2014-09-15 12:19:19',272,222);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(239,'IE','GR','2015-10-22 01:31:27',232,277);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(240,'HG','ID','2015-03-31 21:15:45',217,271);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(241,'HE','HO','2017-01-21 00:38:58',225,241);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(242,'HW','IA','2017-05-14 12:25:40',224,292);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(243,'IC','JQ','2016-10-21 07:58:29',292,244);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(244,'HK','HN','2014-06-03 04:29:35',278,219);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(245,'HN','IG','2015-06-24 12:44:59',239,249);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(246,'HV','KC','2016-09-22 04:10:19',229,212);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(247,'KJ','JN','2015-05-24 13:38:04',295,239);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(248,'GY','GU','2015-12-10 20:22:17',243,209);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(249,'KF','HT','2014-06-15 21:34:07',293,251);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(250,'IA','HD','2016-05-07 00:56:02',210,204);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(251,'IK','HR','2015-04-05 23:17:23',270,216);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(252,'JV','KF','2014-12-30 09:35:14',203,259);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(253,'IN','GW','2015-04-05 22:07:31',274,257);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(254,'KK','GY','2015-05-12 06:43:58',273,213);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(255,'JR','GT','2015-01-20 14:40:53',235,298);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(256,'HD','KD','2015-11-05 19:41:40',205,265);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(257,'HU','HB','2015-03-30 08:03:28',226,263);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(258,'HT','JO','2014-06-18 06:03:11',208,294);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(259,'GW','JW','2014-11-15 20:12:29',228,275);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(260,'JH','KA','2014-04-15 15:41:26',218,228);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(261,'JO','KJ','2015-08-09 12:04:34',250,243);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(262,'IY','IL','2014-12-14 15:10:25',280,289);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(263,'KH','IS','2017-04-27 18:07:44',285,268);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(264,'JU','JB','2014-10-26 16:05:38',222,202);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(265,'HB','KH','2017-05-13 03:54:54',227,256);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(266,'HA','JE','2017-02-20 02:59:48',206,225);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(267,'GS','GV','2016-10-05 17:16:04',251,207);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(268,'KM','KM','2015-02-15 02:31:16',216,224);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(269,'JX','JR','2015-02-12 05:47:15',256,226);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(270,'IL','HJ','2014-12-18 17:22:27',263,267);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(271,'IJ','IF','2015-03-22 23:12:54',299,282);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(272,'GR','IR','2015-08-13 10:46:02',238,297);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(273,'HI','HL','2014-03-24 17:20:14',248,210);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(274,'HY','HY','2015-08-20 12:56:15',275,211);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(275,'JC','HS','2016-11-03 06:01:54',249,250);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(276,'IF','HV','2015-07-13 19:22:54',286,203);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(277,'HH','KG','2016-12-23 14:05:34',247,248);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(278,'KB','JS','2017-01-05 04:25:28',288,253);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(279,'JT','JY','2016-12-06 13:27:05',223,290);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(280,'KL','II','2014-11-13 19:44:53',214,262);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(281,'KG','JC','2016-02-16 19:25:11',294,270);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(282,'HP','HG','2016-06-16 17:30:31',271,300);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(283,'IZ','GS','2014-06-15 21:35:05',289,235);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(284,'HF','JA','2015-09-15 03:39:42',267,258);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(285,'ID','JT','2015-02-10 09:58:28',257,288);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(286,'KI','JX','2015-11-02 05:07:34',201,264);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(287,'JP','IC','2015-11-29 03:07:21',284,227);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(288,'JS','KB','2016-07-05 12:24:25',215,269);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(289,'JL','JK','2017-03-14 14:39:23',259,221);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(290,'GV','IH','2016-05-09 17:18:16',283,285);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(291,'IM','JF','2014-07-24 21:02:11',279,217);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(292,'KD','IN','2015-06-16 07:20:11',253,281);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(293,'JK','HM','2015-08-21 23:03:46',233,247);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(294,'JY','JI','2015-12-10 00:29:29',262,299);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(295,'HR','IV','2015-07-21 11:47:10',231,208);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(296,'IU','IJ','2016-05-11 17:56:55',202,286);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(297,'KA','IW','2016-11-08 15:26:23',277,273);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(298,'IV','IQ','2015-09-16 18:22:51',276,220);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(299,'GX','HH','2017-02-19 02:01:09',260,240);
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(300,'JE','IZ','2014-10-08 15:28:01',245,214);
+COMMIT;
+
+INSERT INTO `viagem`(`codigo`,`origem`,`destinho`) 
+VALUES(301,'Abilio Martins','Abaiara');
+INSERT INTO `voo`(`codigo`,`origem`,`destino`,`data_hora`,`n_aeronave`,`v_codigo`) 
+VALUES(301,'ip','iw','2016-02-25 09:32:31',231,301);
+COMMIT;
