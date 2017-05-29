@@ -206,7 +206,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `lbd`.`Promocao` ;
 
 CREATE TABLE IF NOT EXISTS `lbd`.`Promocao` (
-  `pro_codigo` INT(5) NOT NULL,
+  `pro_codigo` INT(5) NOT NULL AUTO_INCREMENT,
   `desconto` DECIMAL(5,2) NOT NULL,
   `data_ini` DATETIME NOT NULL,
   `data_fim` DATETIME NOT NULL,
