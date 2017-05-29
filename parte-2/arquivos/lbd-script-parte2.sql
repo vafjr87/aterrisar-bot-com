@@ -108,7 +108,7 @@ DROP TABLE IF EXISTS `lbd`.`Passageiro` ;
 
 CREATE TABLE IF NOT EXISTS `lbd`.`Passageiro` (
   `psg_codigo` INT(11) NOT NULL AUTO_INCREMENT,
-  `documento` INT(11) NOT NULL,
+  `documento` VARCHAR(11) NOT NULL,
   `nome` VARCHAR(50) NOT NULL,
   `endereco` VARCHAR(50) NOT NULL,
   `data_nascimento` DATE NOT NULL,
