@@ -243,3 +243,411 @@ DEFAULT CHARACTER SET = latin1;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- -----------------------------------------------------
+-- triggers
+-- -----------------------------------------------------
+DELIMITER $$
+CREATE TRIGGER aeronave_assentos_check_insert
+BEFORE INSERT ON assento
+FOR EACH ROW
+BEGIN
+    IF (SELECT COUNT(*) FROM (SELECT V.qtd_assentos FROM aeronave V WHERE V.aer_codigo = new.aer_codigo) B, (SELECT COUNT(*) AS assentos FROM assento A WHERE A.aer_codigo = new.aer_codigo) C WHERE B.qtd_assentos <= C.assentos) > 0
+    THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'aeronave nao pode ter mais assentos';
+    END IF;
+END$$
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE TRIGGER voo_mesmo_horario_insert
+BEFORE INSERT ON voo
+FOR EACH ROW
+BEGIN
+    IF (SELECT COUNT(*) FROM (SELECT V.data_hora_ini, V.data_hora_fim FROM voo V WHERE V.aer_codigo = new.aer_codigo) C WHERE NOT (new.data_hora_ini > C.data_hora_fim OR C.data_hora_ini > new.data_hora_fim)) > 0
+    THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'aeronave nao pode estar em dois voos ao mesmo tempo';
+    END IF;
+END$$   
+DELIMITER ;
+
+
+
+DELIMITER $$
+CREATE PROCEDURE inserir_assentos(IN n INT, IN aer INT)
+BEGIN
+    DECLARE v1 INT;
+    SET V1 = 1;
+    WHILE v1 <= n DO
+        INSERT INTO assento(classe, aer_codigo, numero) VALUES ('1', aer, v1);
+        SET v1 = v1 + 1;
+    END WHILE;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER aeronave_inserir_assentos
+AFTER INSERT ON aeronave
+FOR EACH ROW
+BEGIN
+    CALL inserir_assentos(new.qtd_assentos, new.aer_codigo);
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER voo_indisponivel_compra_passagem
+AFTER INSERT ON passagem
+FOR EACH ROW
+BEGIN
+    DECLARE qtd_assentos INTEGER;
+    DECLARE aer_id INTEGER;
+    DECLARE count_assentos INTEGER;
+    SELECT A.aer_codigo INTO aer_id FROM assento A WHERE new.ass_codigo = A.ass_codigo;
+    SELECT A.qtd_assentos INTO qtd_assentos FROM aeronave A WHERE A.aer_codigo = aer_id;
+    SELECT COUNT(*) INTO count_assentos FROM passagem A WHERE A.voo_codigo = new.voo_codigo;
+    IF count_assentos = qtd_assentos
+    THEN
+        UPDATE voo V SET V.disponivel = 0 WHERE V.voo_codigo = new.voo_codigo;
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- -----------------------------------------------------
+-- INSERTS
+-- -----------------------------------------------------
+
+INSERT INTO companhia(registro, nome) VALUES ('31373119', 'Venus Microsystems');
+INSERT INTO companhia(registro, nome) VALUES ('52549075', 'Pyramid Co.World Solutions');
+INSERT INTO companhia(registro, nome) VALUES ('25827078', 'Nimbletainment');
+INSERT INTO companhia(registro, nome) VALUES ('27595098', 'Titaniumotors');
+INSERT INTO companhia(registro, nome) VALUES ('19694752', 'Pixelimited');
+INSERT INTO companhia(registro, nome) VALUES ('60050419', 'Hookurity');
+INSERT INTO companhia(registro, nome) VALUES ('89526048', 'Pearlworth');
+INSERT INTO companhia(registro, nome) VALUES ('52998227', 'Flowerbite');
+INSERT INTO companhia(registro, nome) VALUES ('12341704', 'Foresthouse');
+INSERT INTO companhia(registro, nome) VALUES ('63807532', 'Raven Networks');
+INSERT INTO companhia(registro, nome) VALUES ('21656481', 'Dream Co.Red Co.Signetworks');
+INSERT INTO companhia(registro, nome) VALUES ('17606170', 'Gorillacoustics');
+INSERT INTO companhia(registro, nome) VALUES ('59916226', 'Turtletainment');
+INSERT INTO companhia(registro, nome) VALUES ('85915009', 'Mercurtainment');
+INSERT INTO companhia(registro, nome) VALUES ('12763930', 'Webex');
+INSERT INTO companhia(registro, nome) VALUES ('51228180', 'Twilightex');
+INSERT INTO companhia(registro, nome) VALUES ('45297292', 'Diamondcoms');
+INSERT INTO companhia(registro, nome) VALUES ('85893332', 'Bull Intelligence');
+INSERT INTO companhia(registro, nome) VALUES ('75478651', 'Antler Technologies');
+INSERT INTO companhia(registro, nome) VALUES ('38508968', 'Raven Technologies');
+INSERT INTO companhia(registro, nome) VALUES ('64321103', 'Titaniumotors');
+INSERT INTO companhia(registro, nome) VALUES ('11596425', 'Sailightning');
+INSERT INTO companhia(registro, nome) VALUES ('77795507', 'Valkyrecords');
+INSERT INTO companhia(registro, nome) VALUES ('45984438', 'Equinetworks');
+INSERT INTO companhia(registro, nome) VALUES ('68906105', 'Mountainforce');
+INSERT INTO companhia(registro, nome) VALUES ('50301319', 'Freakworth');
+INSERT INTO companhia(registro, nome) VALUES ('11315447', 'Tulipbank');
+INSERT INTO companhia(registro, nome) VALUES ('80879144', 'Pluto Coms');
+INSERT INTO companhia(registro, nome) VALUES ('28046590', 'Lioness Enterprises');
+INSERT INTO companhia(registro, nome) VALUES ('28270566', 'Grotto Microsystems');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('19169', '60', '1');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('61174', '60', '2');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('54194', '60', '3');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('49696', '60', '4');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('71004', '60', '5');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('28278', '60', '6');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('10439', '60', '7');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('66934', '60', '8');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('87753', '60', '9');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('47147', '60', '10');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('43073', '60', '11');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('43065', '60', '12');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('52927', '60', '13');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('10543', '60', '14');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('26059', '60', '15');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('50242', '60', '16');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('25556', '60', '17');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('28552', '60', '18');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('48783', '60', '19');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('25502', '60', '20');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('88176', '60', '21');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('63732', '60', '22');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('22028', '60', '23');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('83516', '60', '24');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('21497', '60', '25');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('73415', '60', '26');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('77188', '60', '27');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('24483', '60', '28');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('57030', '60', '29');
+INSERT INTO aeronave(modelo, qtd_assentos, com_companhia) VALUES ('37992', '60', '30');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('26719248041', 'Whitney Mckenzie', 'Av 12, 12, Sao Paulo, SP', '1971-12-22');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('70722269281', 'Emanuel Morales', 'Av 12, 12, Sao Paulo, SP', '1973-06-12');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76778897355', 'Jean Burgess', 'Av 12, 12, Sao Paulo, SP', '1973-12-31');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('53755761015', 'Norma Sanders', 'Av 12, 12, Sao Paulo, SP', '1974-11-30');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('69739760763', 'Ethel Snyder', 'Av 12, 12, Sao Paulo, SP', '1975-10-03');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('19953737987', 'Alicia Rogers', 'Av 12, 12, Sao Paulo, SP', '1975-10-30');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('24041856748', 'Robyn Blair', 'Av 12, 12, Sao Paulo, SP', '1976-08-08');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('17947610465', 'Charlie Murray', 'Av 12, 12, Sao Paulo, SP', '1978-08-13');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('34921187828', 'Alyssa Miles', 'Av 12, 12, Sao Paulo, SP', '1979-07-10');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('67424537222', 'Edmund Martin', 'Av 12, 12, Sao Paulo, SP', '1980-03-16');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('46173388809', 'Andres Castro', 'Av 12, 12, Sao Paulo, SP', '1980-06-25');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('51731735552', 'Javier Webster', 'Av 12, 12, Sao Paulo, SP', '1981-03-17');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('33468632432', 'Margie Norris', 'Av 12, 12, Sao Paulo, SP', '1982-09-05');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('18056797792', 'Ora Estrada', 'Av 12, 12, Sao Paulo, SP', '1983-01-05');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('37001650125', 'Danny Cummings', 'Av 12, 12, Sao Paulo, SP', '1983-07-13');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76119526531', 'Anita Chandler', 'Av 12, 12, Sao Paulo, SP', '1984-11-16');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('61816144598', 'Lori Beck', 'Av 12, 12, Sao Paulo, SP', '1986-10-11');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('69462302085', 'Rosemary Fowler', 'Av 12, 12, Sao Paulo, SP', '1987-01-19');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('13174297559', 'Lena Johnston', 'Av 12, 12, Sao Paulo, SP', '1989-04-04');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76820919082', 'Daisy Collins', 'Av 12, 12, Sao Paulo, SP', '1990-02-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('11377423002', 'Ollie Alexander', 'Av 12, 12, Sao Paulo, SP', '1990-07-18');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('80614428215', 'Louise Meyer', 'Av 12, 12, Sao Paulo, SP', '1990-08-30');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('41228802451', 'Ellen Mccormick', 'Av 12, 12, Sao Paulo, SP', '1996-06-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('88255822486', 'Hope Wong', 'Av 12, 12, Sao Paulo, SP', '1999-05-30');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('29575465150', 'Chris Mack', 'Av 12, 12, Sao Paulo, SP', '1999-11-26');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('10527061765', 'Gwendolyn Wilkerson', 'Av 12, 12, Sao Paulo, SP', '1971-03-10');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('48159603393', 'Moses Brock', 'Av 12, 12, Sao Paulo, SP', '1978-05-19');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('83522717400', 'Elizabeth Armstrong', 'Av 12, 12, Sao Paulo, SP', '1979-12-17');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('10443437453', 'Stephen Carroll', 'Av 12, 12, Sao Paulo, SP', '1988-08-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('40921638262', 'Ruby Sims', 'Av 12, 12, Sao Paulo, SP', '1998-10-05');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('14787966622', 'Katrina Day', 'Av 12, 12, Sao Paulo, SP', '1971-03-16');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('82017342853', 'Wendy Gill', 'Av 12, 12, Sao Paulo, SP', '1976-02-12');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('11919833361', 'Maria Fuller', 'Av 12, 12, Sao Paulo, SP', '1978-12-20');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('78563472095', 'Marshall Roberson', 'Av 12, 12, Sao Paulo, SP', '1979-03-22');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('47004340323', 'Carmen Miller', 'Av 12, 12, Sao Paulo, SP', '1979-08-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('28655575666', 'Melissa Stephens', 'Av 12, 12, Sao Paulo, SP', '1980-08-13');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('16509839549', 'Harold Wallace', 'Av 12, 12, Sao Paulo, SP', '1980-09-17');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('88453417514', 'Dwayne Kelley', 'Av 12, 12, Sao Paulo, SP', '1982-06-08');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('74615078062', 'Sara Keller', 'Av 12, 12, Sao Paulo, SP', '1983-01-11');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('80223309673', 'Laurie Castillo', 'Av 12, 12, Sao Paulo, SP', '1983-05-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('15527771151', 'Jake Guzman', 'Av 12, 12, Sao Paulo, SP', '1983-05-14');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('38846103845', 'Teresa Jacobs', 'Av 12, 12, Sao Paulo, SP', '1985-03-01');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('28841706857', 'Meghan Lee', 'Av 12, 12, Sao Paulo, SP', '1987-03-14');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('22458328600', 'Stacy Ballard', 'Av 12, 12, Sao Paulo, SP', '1987-06-21');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('86401851527', 'Kirk Strickland', 'Av 12, 12, Sao Paulo, SP', '1988-06-13');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('49337555625', 'Alexis Daniels', 'Av 12, 12, Sao Paulo, SP', '1990-02-14');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76245242012', 'Megan Cobb', 'Av 12, 12, Sao Paulo, SP', '1990-12-16');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('25672864845', 'Julian Webb', 'Av 12, 12, Sao Paulo, SP', '1992-01-02');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('45629860486', 'Maureen Wright', 'Av 12, 12, Sao Paulo, SP', '1993-12-03');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('33128096984', 'Raul Flores', 'Av 12, 12, Sao Paulo, SP', '1995-01-26');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('58895572501', 'Dexter Jackson', 'Av 12, 12, Sao Paulo, SP', '1995-12-22');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('15922987822', 'Robin Wagner', 'Av 12, 12, Sao Paulo, SP', '1996-05-11');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('77161549528', 'Owen Bowen', 'Av 12, 12, Sao Paulo, SP', '1997-10-24');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('21823323806', 'Ignacio Abbott', 'Av 12, 12, Sao Paulo, SP', '1998-06-04');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('27036020181', 'Kathleen Riley', 'Av 12, 12, Sao Paulo, SP', '1999-04-23');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('25778879666', 'Marlene Stewart', 'Av 12, 12, Sao Paulo, SP', '1973-09-02');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('84229655504', 'Marcos Bass', 'Av 12, 12, Sao Paulo, SP', '1975-07-17');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('53837878090', 'Patti Long', 'Av 12, 12, Sao Paulo, SP', '1976-11-15');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('22342138960', 'Troy Hardy', 'Av 12, 12, Sao Paulo, SP', '1977-05-21');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('84054669118', 'Josh Huff', 'Av 12, 12, Sao Paulo, SP', '1980-07-09');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76443411137', 'Delores Luna', 'Av 12, 12, Sao Paulo, SP', '1980-08-21');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('72853491931', 'Jane Schwartz', 'Av 12, 12, Sao Paulo, SP', '1982-11-10');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('55082260895', 'Heidi Mendoza', 'Av 12, 12, Sao Paulo, SP', '1985-05-28');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('55650041271', 'Cedric Steele', 'Av 12, 12, Sao Paulo, SP', '1986-06-11');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('25817467566', 'Myrtle Kelly', 'Av 12, 12, Sao Paulo, SP', '1987-01-14');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('40752678503', 'Tracey Brown', 'Av 12, 12, Sao Paulo, SP', '1992-12-14');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('69733012027', 'Natasha Jimenez', 'Av 12, 12, Sao Paulo, SP', '1993-03-17');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('33614712398', 'Virginia Jenkins', 'Av 12, 12, Sao Paulo, SP', '1996-10-04');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('76128664168', 'Chelsea Holland', 'Av 12, 12, Sao Paulo, SP', '1997-01-06');
+INSERT INTO passageiro(documento, nome, endereco, data_nascimento)VALUES ('57474470819', 'Erika Franklin ', 'Av 12, 12, Sao Paulo, SP', '1997-04-09');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('GRU', 'local 0', 'nome 1');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('SSS', 'local 1', 'nome 2');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('PNB', 'local 2', 'nome 3');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('VDU', 'local 3', 'nome 4');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('YOB', 'local 4', 'nome 5');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('YLY', 'local 5', 'nome 6');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('VZW', 'local 6', 'nome 7');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('WQQ', 'local 7', 'nome 8');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('EGF', 'local 8', 'nome 9');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('UMX', 'local 9', 'nome 10');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('KSY', 'local 10', 'nome 11');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('MQN', 'local 11', 'nome 12');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('YMZ', 'local 12', 'nome 13');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('EZZ', 'local 13', 'nome 14');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('ZHO', 'local 14', 'nome 15');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('BFN', 'local 15', 'nome 16');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('YWS', 'local 16', 'nome 17');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('DMU', 'local 17', 'nome 18');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('VZK', 'local 18', 'nome 19');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('TXR', 'local 19', 'nome 20');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('EBL', 'local 20', 'nome 21');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('DIV', 'local 21', 'nome 22');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('PSS', 'local 22', 'nome 23');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('GSP', 'local 23', 'nome 24');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('YEA', 'local 24', 'nome 25');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('VXP', 'local 25', 'nome 26');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('QUA', 'local 26', 'nome 27');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('PUO', 'local 27', 'nome 28');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('HHH', 'local 28', 'nome 29');
+INSERT INTO aeroporto(sigla, local, nome) VALUES ('SDF', 'local 29', 'nome 30');
+INSERT INTO viagem(origem, destinho) VALUES ('GRU', 'SSS');
+INSERT INTO viagem(origem, destinho) VALUES ('SSS', 'PNB');
+INSERT INTO viagem(origem, destinho) VALUES ('PNB', 'VDU');
+INSERT INTO viagem(origem, destinho) VALUES ('VDU', 'YOB');
+INSERT INTO viagem(origem, destinho) VALUES ('YOB', 'YLY');
+INSERT INTO viagem(origem, destinho) VALUES ('YLY', 'VZW');
+INSERT INTO viagem(origem, destinho) VALUES ('VZW', 'WQQ');
+INSERT INTO viagem(origem, destinho) VALUES ('WQQ', 'EGF');
+INSERT INTO viagem(origem, destinho) VALUES ('EGF', 'UMX');
+INSERT INTO viagem(origem, destinho) VALUES ('UMX', 'KSY');
+INSERT INTO viagem(origem, destinho) VALUES ('KSY', 'MQN');
+INSERT INTO viagem(origem, destinho) VALUES ('MQN', 'YMZ');
+INSERT INTO viagem(origem, destinho) VALUES ('YMZ', 'EZZ');
+INSERT INTO viagem(origem, destinho) VALUES ('EZZ', 'ZHO');
+INSERT INTO viagem(origem, destinho) VALUES ('ZHO', 'BFN');
+INSERT INTO viagem(origem, destinho) VALUES ('BFN', 'YWS');
+INSERT INTO viagem(origem, destinho) VALUES ('YWS', 'DMU');
+INSERT INTO viagem(origem, destinho) VALUES ('DMU', 'VZK');
+INSERT INTO viagem(origem, destinho) VALUES ('VZK', 'TXR');
+INSERT INTO viagem(origem, destinho) VALUES ('TXR', 'EBL');
+INSERT INTO viagem(origem, destinho) VALUES ('EBL', 'DIV');
+INSERT INTO viagem(origem, destinho) VALUES ('DIV', 'PSS');
+INSERT INTO viagem(origem, destinho) VALUES ('PSS', 'GSP');
+INSERT INTO viagem(origem, destinho) VALUES ('GSP', 'YEA');
+INSERT INTO viagem(origem, destinho) VALUES ('YEA', 'VXP');
+INSERT INTO viagem(origem, destinho) VALUES ('VXP', 'QUA');
+INSERT INTO viagem(origem, destinho) VALUES ('QUA', 'PUO');
+INSERT INTO viagem(origem, destinho) VALUES ('PUO', 'HHH');
+INSERT INTO viagem(origem, destinho) VALUES ('HHH', 'SDF');
+INSERT INTO viagem(origem, destinho) VALUES ('SDF', 'GRU');
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('GRU', 'SSS', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 1, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('SSS', 'PNB', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 2, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('PNB', 'VDU', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 3, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('VDU', 'YOB', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 4, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('YOB', 'YLY', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 5, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('YLY', 'VZW', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 6, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('VZW', 'WQQ', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 7, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('WQQ', 'EGF', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 8, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('EGF', 'UMX', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 9, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('UMX', 'KSY', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 10, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('KSY', 'MQN', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 11, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('MQN', 'YMZ', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 12, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('YMZ', 'EZZ', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 13, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('EZZ', 'ZHO', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 14, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('ZHO', 'BFN', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 15, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('BFN', 'YWS', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 16, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('YWS', 'DMU', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 17, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('DMU', 'VZK', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 18, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('VZK', 'TXR', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 19, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('TXR', 'EBL', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 20, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('EBL', 'DIV', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 21, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('DIV', 'PSS', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 22, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('PSS', 'GSP', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 23, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('GSP', 'YEA', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 24, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('YEA', 'VXP', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 25, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('VXP', 'QUA', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 26, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('QUA', 'PUO', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 27, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('PUO', 'HHH', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 28, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('HHH', 'SDF', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 29, 1, 100.0);
+INSERT INTO voo(origem, destino, data_hora_ini, data_hora_fim, aer_codigo, disponivel, preco) VALUES ('SDF', 'GRU', '2017-04-01-00:00:00', '2017-07-01-00:00:00', 30, 1, 100.0);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (1, 1);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (2, 2);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (3, 3);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (4, 4);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (5, 5);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (6, 6);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (7, 7);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (8, 8);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (9, 9);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (10, 10);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (11, 11);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (12, 12);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (13, 13);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (14, 14);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (15, 15);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (16, 16);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (17, 17);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (18, 18);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (19, 19);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (20, 20);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (21, 21);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (22, 22);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (23, 23);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (24, 24);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (25, 25);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (26, 26);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (27, 27);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (28, 28);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (29, 29);
+INSERT INTO trecho(voo_codigo, via_codigo) VALUES (30, 30);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 1, 1, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 2, 2, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 3, 3, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 4, 4, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 5, 5, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 6, 6, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 7, 7, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 8, 8, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 9, 9, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 10, 10, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 11, 11, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 12, 12, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 13, 13, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 14, 14, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 15, 15, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 16, 16, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 17, 17, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 18, 18, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 19, 19, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 20, 20, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 21, 21, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 22, 22, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 23, 23, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 24, 24, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 25, 25, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 26, 26, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 27, 27, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 28, 28, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 29, 29, 1);
+INSERT INTO passagem(status, psg_codigo, voo_codigo, ass_codigo) VALUES ('OK', 30, 30, 1);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 1);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 2);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 3);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 4);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 5);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 6);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 7);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 8);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 9);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 10);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 11);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 12);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 13);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 14);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 15);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 16);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 17);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 18);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 19);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 20);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 21);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 22);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 23);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 24);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 25);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 26);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 27);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 28);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 29);
+INSERT INTO promocao(desconto, data_ini, data_fim, voo_codigo) VALUES (10, '2017-03-01-00:00:00', '2017-10-01-00:00:00', 30);
+
+-- -----------------------------------------------------
+-- VIEWS
+-- -----------------------------------------------------
+
+CREATE VIEW ofertas_ativas AS
+SELECT P.pro_codigo, P.desconto, P.data_ini, P.data_fim, P.voo_codigo, V.origem, V.destino
+FROM promocao P, voo V
+WHERE P.data_ini < NOW()
+AND P.data_fim > NOW()
+AND P.voo_codigo = V.voo_codigo;
+
+CREATE VIEW informacao
+(nome, documento, pas_codigo, numero, voo_codigo, origem, destino, data_hora_ini, data_hora_fim) as
+  select PSG.nome, PSG.documento, PAS.pas_codigo, ASS.numero, V.voo_codigo, V.origem, V.destino, V.data_hora_ini, V.data_hora_fim
+  FROM Passageiro PSG, Passagem PAS, Assento ASS, Voo V 
+  WHERE PSG.psg_codigo = PAS.psg_codigo 
+    AND V.voo_codigo = PAS.voo_codigo
+    AND ASS.ass_codigo = PAS.ass_codigo
+    AND V.data_hora_ini>NOW();
