@@ -1,0 +1,78 @@
+#trigger1
+##sql padrao
+CREATE PROCEDURE inserir_assentos(IN n INT, IN aer INT)
+BEGIN
+    DECLARE v1 INT;
+    SET V1 = 1;
+    WHILE v1 <= n DO
+        INSERT INTO assento(classe, aer_codigo, numero) VALUES ('1', aer, v1);
+        SET v1 = v1 + 1;
+    END WHILE;
+END;
+
+
+CREATE TRIGGER aeronave_inserir_assentos
+AFTER INSERT ON aeronave
+FOR EACH ROW
+BEGIN
+    CALL inserir_assentos(new.qtd_assentos, new.aer_codigo);
+END;
+
+##mysql
+DELIMITER $$
+CREATE PROCEDURE inserir_assentos(IN n INT, IN aer INT)
+BEGIN
+    DECLARE v1 INT;
+    SET V1 = 1;
+    WHILE v1 <= n DO
+        INSERT INTO assento(classe, aer_codigo, numero) VALUES ('1', aer, v1);
+        SET v1 = v1 + 1;
+    END WHILE;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER aeronave_inserir_assentos
+AFTER INSERT ON aeronave
+FOR EACH ROW
+BEGIN
+    CALL inserir_assentos(new.qtd_assentos, new.aer_codigo);
+END$$
+DELIMITER ;
+
+#trigger 2
+##sql padrao
+CREATE TRIGGER voo_indisponivel_compra_passagem
+AFTER INSERT ON passagem
+FOR EACH ROW
+BEGIN
+    DECLARE qtd_assentos INTEGER;
+    DECLARE aer_id INTEGER;
+    DECLARE count_assentos INTEGER;
+    SELECT A.aer_codigo INTO aer_id FROM assento A WHERE new.ass_codigo = A.ass_codigo;
+    SELECT A.qtd_assentos INTO qtd_assentos FROM aeronave A WHERE A.aer_codigo = aer_id;
+    SELECT COUNT(*) INTO count_assentos FROM passagem A WHERE A.voo_codigo = new.voo_codigo;
+    IF count_assentos = qtd_assentos
+    THEN
+        UPDATE voo V SET V.disponivel = 0 WHERE V.voo_codigo = new.voo_codigo;
+    END IF;
+END;
+
+##mysql
+DELIMITER $$
+CREATE TRIGGER voo_indisponivel_compra_passagem
+AFTER INSERT ON passagem
+FOR EACH ROW
+BEGIN
+    DECLARE qtd_assentos INTEGER;
+    DECLARE aer_id INTEGER;
+    DECLARE count_assentos INTEGER;
+    SELECT A.aer_codigo INTO aer_id FROM assento A WHERE new.ass_codigo = A.ass_codigo;
+    SELECT A.qtd_assentos INTO qtd_assentos FROM aeronave A WHERE A.aer_codigo = aer_id;
+    SELECT COUNT(*) INTO count_assentos FROM passagem A WHERE A.voo_codigo = new.voo_codigo;
+    IF count_assentos = qtd_assentos
+    THEN
+        UPDATE voo V SET V.disponivel = 0 WHERE V.voo_codigo = new.voo_codigo;
+    END IF;
+END$$
+DELIMITER ;

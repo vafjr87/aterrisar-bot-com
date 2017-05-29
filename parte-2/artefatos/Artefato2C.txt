@@ -1,0 +1,20 @@
+#view restricao
+##sql padrao
+CREATE VIEW informacao
+(nome, documento, pas_codigo, numero, voo_codigo, origem, destino, data_hora_ini, data_hora_fim) as
+	select PSG.nome, PSG.documento, PAS.pas_codigo, ASS.numero, V.voo_codigo, V.origem, V.destino, V.data_hora_ini, V.data_hora_fim
+	FROM Passageiro PSG, Passagem PAS, Assento ASS, Voo V 
+	WHERE PSG.psg_codigo = PAS.psg_codigo 
+		AND V.voo_codigo = PAS.voo_codigo
+		AND ASS.ass_codigo = PAS.ass_codigo
+		AND V.data_hora_ini>getutcdate();
+
+##mysql
+CREATE VIEW informacao
+(nome, documento, pas_codigo, numero, voo_codigo, origem, destino, data_hora_ini, data_hora_fim) as
+	select PSG.nome, PSG.documento, PAS.pas_codigo, ASS.numero, V.voo_codigo, V.origem, V.destino, V.data_hora_ini, V.data_hora_fim
+	FROM Passageiro PSG, Passagem PAS, Assento ASS, Voo V 
+	WHERE PSG.psg_codigo = PAS.psg_codigo 
+		AND V.voo_codigo = PAS.voo_codigo
+		AND ASS.ass_codigo = PAS.ass_codigo
+		AND V.data_hora_ini>NOW();
