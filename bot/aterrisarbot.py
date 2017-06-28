@@ -136,7 +136,6 @@ class aterrisar_bot:
 
                 print(query)
                 rows = self.execute_query(query)
-                # print(rows[0])
                 if rows:
                     title = (
                         '*{nome_origem} ({origem})*\n'
@@ -285,8 +284,7 @@ class aterrisar_bot:
             reply_markup=ReplyKeyboardMarkup(self.reply_keyboard, one_time_keyboard=True))
 
     def unknown(self, bot, update):
-        # update.message.reply_text(self.messages['inválido'], quote=True,
-        update.message.reply_text('', quote=True,
+        update.message.reply_text(self.messages['inválido'], quote=True,
             parse_mode=telegram.ParseMode.MARKDOWN,
             reply_markup=ReplyKeyboardMarkup(self.reply_keyboard, one_time_keyboard=True))
         u.log_activity(update)
@@ -299,7 +297,6 @@ class aterrisar_bot:
 
     def echo(self, bot, update):
         if self.command_buffer:
-            print(update.message.text[-4: -1])
             self.command_buffer(bot, update, [update.message.text[-4: -1]])
             self.command_buffer = None
         else:
